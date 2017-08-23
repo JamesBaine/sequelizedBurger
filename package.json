@@ -16,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/JamesBaine/sequelizedBurger/issues"
   },
-  "homepage": "https://github.com/JamesBaine/sequelizedBurger#readme"
+  "homepage": "https://github.com/JamesBaine/sequelizedBurger#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "express-handlebars": "^3.0.0",
+    "method-override": "^2.3.9",
+    "mysql": "^2.14.1"
+  }
 }
