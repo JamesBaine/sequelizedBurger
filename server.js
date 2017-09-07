@@ -1,34 +1,35 @@
+
+// Express
 var express = require("express");
-var bodyParser = require("body-parser");
-var methodOverride = require("method-override");
+var app = express();
+
+var PORT = process.env.PORT || 3000;
 
 var db = require("./models");
 
-var app = express();
+app.use(express.static("./public"));
 
-app.use(express.static(__dirname + "/public"));
+// Body Parser
+var bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.text());
+app.use(bodyParser.json({type: "application/vnd.api+json"}));
 
-app.use(bodyParser.urlencoded({
-	extended: false
-}));
-
+// Method Override
+var methodOverride = require("method-override");
 app.use(methodOverride("_method"));
-var exphbs = require("express-handlebars");
 
-app.engine("handlebars", exphbs({
-	defaultLayout: "main"
-}));
+// Express Handlebars
+var expHbars = require("express-handlebars");
+app.engine("handlebars", expHbars({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-var routes = require("./controllers/burgers_controller.js");
+require("./controllers/burgers_controller.js")(app);
 
-app.use("/", routes);
-app.use("/update", routes);
-app.use("/create", routes);
+db.sequelize.sync({force: true}).then(function(){
 
-var port = 3000;
-db.sequelize.sync().then(function() {
-	app.listen(port);
+	app.listen(PORT, function() {
+		console.log("Connection Successful");
+	});
 });
-
-console.log(module.exports);
