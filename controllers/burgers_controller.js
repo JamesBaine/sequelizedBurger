@@ -1,24 +1,43 @@
 var express = require("express");
 var router = express.Router();
-var burger = require("../models/burger.js");
+var db = require("../models/");
 
 router.get("/", function(req,res){
-	burger.all(function(burger_data){
-		console.log(burger_data);
-		res.render("index",{burger_data});
-	});
+	res.redirect("/burgers");
 });
 
-router.put("/burger/update", function(req,res){
-	burger.update(req.body.burger_id, function(result){
-		console.log(result);
-		res.redirect("/");
-	});
+
+router.get("/burgers", function(req,res){
+	db.Burger.findAll()
+
+		.then(function(dbBurger){
+			console.log(dbBurger);
+
+			var hbsObject = { burger: dbBurger };
+			return res.render("index", hbsObject);
+		});
 });
 
 router.post("/burger/create", function(req,res){
-	burger.create(req.body.burger_name, function(result){
-		console.log(result);
+	db.Burger.create({
+		burger_name: req.body.burger_name
+	})
+		.then(function(dbBurger){
+			console.log(dbBurger);
+			res.redirect("/");
+		});
+});
+
+router.put("/burgers/update", function(req,res){
+	db.Burger.update({
+		devoured: true
+	},
+	{
+		where: {
+			id: req.body.burger_id
+		}
+	}
+	).then(function(dbBurger){
 		res.redirect("/");
 	});
 });

@@ -1,19 +1,18 @@
-var orm = require("../config/orm.js");
+//Burger models
 
-var burger = {
-	all: function(cb){
-		orm.all("burger", function(res){
-			cb(res);
-		});
-	},
+module.exports = function(sequelize, DataTypes) {
+	var Burger = sequelize.define("Burger", {
+		burger_name: DataTypes.STRING,
+		devoured: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false
+		}
+	}, {
+		classMethods: {
+			associate: function(models) {
 
-	update: function(id,cb){
-		orm.update("burger",id,cb);
-	},
-
-	create: function(name,cb){
-		orm.create("burger",name,cb);
-	}
+			}
+		}
+	});
+	return Burger;
 };
-
-module.exports = burger;
